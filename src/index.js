@@ -22,11 +22,11 @@ app.get("/api/real-estate/:id", async (req, res) => {
         type: reType,
         price: {
           $gte: parseInt(!!minPrice ? minPrice : 0),
-          $lte: parseInt(!!maxPrice ? maxPrice : 9999999999)
+          $lte: parseInt(!!maxPrice ? maxPrice : 999999999)
         },
         "about.rooms":{
           $gte: parseInt(Boolean(minRooms) ? minRooms : 0),
-          $lte: parseInt(Boolean(maxRooms) ? maxRooms : Infinity)
+          $lte: parseInt(Boolean(maxRooms) ? maxRooms : 12)
         },
         "address.city": address ? address : { $regex: ".*" },
         "about.type":!!propertyType?{ $in: propertyType}: { $regex: ".*" },
