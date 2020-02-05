@@ -1,7 +1,6 @@
 const  mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
 const addressSchema= new Schema({
     city:String,
     street:String,
@@ -9,6 +8,7 @@ const addressSchema= new Schema({
     number:Number
 })
 const aboutSchema= new Schema({
+    type:String,
     shelter:Boolean,
     //bathroom:{...detail},
     //storeroom:{...detail},
@@ -41,7 +41,7 @@ const realEstateSchema= new Schema({
      default:'not specified'
  },
  address:addressSchema,
- prise:Number,
+ price:Number,
  pictures:[{type:String}],
  about:aboutSchema,
  propertyDetails:propertyDetailsSchema,
