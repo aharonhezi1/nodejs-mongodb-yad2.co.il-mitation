@@ -31,7 +31,7 @@ router.post('/api/real-estate/find-address', (req, res) => {
 
 		const { cities, streets } = findMatchBetweenAddressesAndSearch(options, addresses);
 
-		res.send({ cities: cities.slice(0, 4), streets: streets.slice(0, 10), address });
+		res.send({ cities: cities.slice(0, 4), streets: streets.slice(0, 10) });
 	} catch (e) {
 		console.log(e);
 

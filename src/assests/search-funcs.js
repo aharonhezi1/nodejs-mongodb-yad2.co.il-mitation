@@ -6,12 +6,12 @@ function findMatchBetweenAddressesAndSearch(searchOptions, addressesDB) {
 		addressesDB.forEach((address, i) => {
 			const city = address.city
 			const street = address.street
-			const regex=new RegExp('(^| )'+option)
+			const regex=new RegExp('( |^)'+option)
 			if (regex.test(street)) {
-				streets.push(address);
+				streets.push({...address,option});
 			}
 			if (regex.test(city) && cities.indexOf(address.city) === -1) {
-				cities.push(address.city);
+				cities.push({city:address.city,option});
 			}
 			// limit match number
 			if (cities.length + streets.length > 12 && cities.length > 2 && streets.length > 2)
