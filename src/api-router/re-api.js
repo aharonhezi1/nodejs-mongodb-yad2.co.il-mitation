@@ -1,52 +1,37 @@
-const express = require('express')
-const router = new express.Router()
+const express = require('express');
+const router = new express.Router();
 const { addresses, test } = require('../db/israelAddress');
 const RealEstate = require('../db/realEstateModel');
 const moment = require('moment');
-
-
+const he = require('convert-layout/he');
+const {
+	convertSearchStringToMaxPossibleOptionsArray,
+	findMatchBetweenAddressesAndSearch,
+} = require('../assests/search-funcs');
+function formatEnteryDate(flats) {
+	return flats.map(flat => {
+		if (!flat.about.enteryDate) return flat;
+		let f = {
+			...flat.toObject(),
+			about: {
+				...flat.about.toObject(),
+				enteryDate: moment(flat.about.enteryDate).format('DD/MM/YYYY'),
+			},
+		};
+		return f;
+	});
+}
 router.post('/api/real-estate/find-address', (req, res) => {
 	try {
 		let { address } = req.body;
+		//convert to hebrew letters
+		address = he.fromEn(address);
 
-		address = address
-			.trim()
-			.split(' ')
-			.filter(ad => ad !== ''); 
-		let options = [];
-		const BreakException = {};
-		let cities = [],
-			streets = [];
-		for (let i = address.length; i > 0; i--) {
-			for (let j = 0; j + i <= address.length; j++) {
-				options.push(address.slice(j, j + i).join(' '));
-			}
-		}
-		console.log('options: ', options);
+		const options = convertSearchStringToMaxPossibleOptionsArray(address);
 
-		options.forEach((option) => {
-			const length = option.length;
-			try {
-				addresses.forEach((address,i) => {
-					const city = address.city.slice(0, length);
-					const street = address.street.slice(0, length);
+		const { cities, streets } = findMatchBetweenAddressesAndSearch(options, addresses);
 
-					if (street === option) {
-						// || (options[i+1]&&street === (option+" "+options[i+1]))) {
-						streets.push(address);
-					}
-					if (city === option && cities.indexOf(address.city) === -1) {
-						// || (options[i+1]&&city === (option+" "+options[i+1])) )&& cities.indexOf(address.city) === -1) {
-						cities.push(address.city);
-					}
-					if (cities.length + streets.length > 12 && cities.length > 2 && streets.length > 2)
-						throw BreakException;
-				});
-			} catch (e) {
-				if (e !== BreakException) throw e;
-			}
-		});
-		res.send({ cities, streets: streets.slice(0, 7) });
+		res.send({ cities: cities.slice(0, 4), streets: streets.slice(0, 10), address });
 	} catch (e) {
 		console.log(e);
 
@@ -85,21 +70,12 @@ router.get('/api/real-estate/:id', async (req, res) => {
 			flats = await RealEstate.find({ type: reType });
 		}
 
-		flats = flats.map(flat => {
-			if (!flat.about.enteryDate) return flat;
-			let f = {
-				...flat.toObject(),
-				about: {
-					...flat.about.toObject(),
-					enteryDate: moment(flat.about.enteryDate).format('DD/MM/YYYY'),
-				},
-			};
-			return f;
-		});
+		flats = formatEnteryDate(flats);
+
 		res.send(flats);
 	} catch (e) {
 		console.log(e);
 		res.status(400).send(e);
 	}
 });
-module.exports=router
+module.exports = router;

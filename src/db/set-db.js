@@ -291,10 +291,7 @@ const realEstates = [
 	},
 ];
 
-// state.forEach(car => {
-// new Car(car).save(e=>
-//     console.log('car: '+car.plateNumber,e)
-//     )
-// });
+// realEstates.forEach(re => {	new RealEstate(re).save(e => console.log(e));});
+
 //RealEstate.remove({}, ()=>console.log('remove'));
 RealEstate.insertMany(realEstates, e => console.log(e));

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+//const timestamps = require('mongoose-timestamp');
 const addressSchema = new Schema({
   city: String,
   street: String,
@@ -51,8 +51,10 @@ const realEstateSchema = new Schema({
     default: "forsale",
     required: true
   }
-});
-
+},
+{timestamps:true}
+);
+// realEstateSchema.plugin(timestamps);
 const RealEstate = mongoose.model("realEstate", realEstateSchema);
 // const house=new RealEstate({about:{sheler:true}})
 // console.log(house);
