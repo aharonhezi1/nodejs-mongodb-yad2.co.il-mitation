@@ -1,3 +1,5 @@
+//const he = require('convert-layout/he');
+
 function findMatchBetweenAddressesAndSearch(searchOptions, addressesDB) {
 	let cities = [],
 		streets = [];
@@ -10,7 +12,7 @@ function findMatchBetweenAddressesAndSearch(searchOptions, addressesDB) {
 			if (regex.test(street)) {
 				streets.push({...address,option});
 			}
-			if (regex.test(city) && cities.indexOf(address.city) === -1) {
+			if (regex.test(city) && !cities.some(city=>city.city===address.city)) {
 				cities.push({city:address.city,option});
 			}
 			// limit match number
@@ -24,15 +26,15 @@ function findMatchBetweenAddressesAndSearch(searchOptions, addressesDB) {
 
 function convertSearchStringToMaxPossibleOptionsArray(searchStr) {
 	let options = [];
-	const cleanArray = searchStr
-		.trim()
+	const cleanArray =searchStr
 		.split(' ')
-		.filter(ad => ad !== '');
+		.filter(str => str !== '');
+		
 	for (let i = cleanArray.length; i > 0; i--) {
 		for (let j = 0; j + i <= cleanArray.length; j++) {
 			options.push(cleanArray.slice(j, j + i).join(' '));
 		}
 	}
-	return options;
+	return options;''
 }
 module.exports={convertSearchStringToMaxPossibleOptionsArray,findMatchBetweenAddressesAndSearch}

@@ -294,4 +294,7 @@ const realEstates = [
 // realEstates.forEach(re => {	new RealEstate(re).save(e => console.log(e));});
 
 //RealEstate.remove({}, ()=>console.log('remove'));
-RealEstate.insertMany(realEstates, e => console.log(e));
+for(let i=0;i<10;i++){
+	RealEstate.insertMany(realEstates, e => console.log(e));
+}
+//RealEstate.insertMany(realEstates, e => console.log(e));

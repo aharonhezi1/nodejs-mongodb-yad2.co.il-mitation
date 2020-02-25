@@ -8,6 +8,7 @@ const {
 	convertSearchStringToMaxPossibleOptionsArray,
 	findMatchBetweenAddressesAndSearch,
 } = require('../assests/search-funcs');
+const { createFindQuery } = require('../assests/guery-funcs');
 function formatEnteryDate(flats) {
 	return flats.map(flat => {
 		if (!flat.about.enteryDate) return flat;
@@ -21,11 +22,16 @@ function formatEnteryDate(flats) {
 		return f;
 	});
 }
+const sortby = {
+	byDate: 'updatedAt',
+	fromLowPrice: 'price',
+	fromHighPirce: '-price',
+};
 router.post('/api/real-estate/find-address', (req, res) => {
 	try {
 		let { address } = req.body;
 		//convert to hebrew letters
-		address = he.fromEn(address);
+		address = he.fromEn(address.trim().replace(',', ' '));
 
 		const options = convertSearchStringToMaxPossibleOptionsArray(address);
 
@@ -42,37 +48,22 @@ router.get('/api/real-estate/:id', async (req, res) => {
 	try {
 		const reType = req.params.id;
 		const queryParams = req.query;
+		const page = req.header('page');
+		const sortOptions = JSON.parse(req.header('sortOptions'))
+		console.log(sortOptions);
 		console.log(queryParams);
 		let flats;
-		if (!!queryParams) {
-			const { maxRooms, minRooms, minPrice, maxPrice } = queryParams;
-			let { address, propertyType } = queryParams;
-			address = address ? address.split(',').reverse() : '';
-			propertyType = propertyType ? propertyType.split(',') : '';
-			let query = {
-				type: reType,
-				price: {
-					$gte: parseInt(!!minPrice ? minPrice : 0),
-					$lte: parseInt(!!maxPrice ? maxPrice : 999999999),
-				},
-				'about.rooms': {
-					$gte: parseInt(Boolean(minRooms) ? minRooms : 0),
-					$lte: parseInt(Boolean(maxRooms) ? maxRooms : 12),
-				},
-				'address.city': address[0] ? address[0] : { $regex: '.*' },
-				'address.street': address[1] ? address[1] : { $regex: '.*' },
+		//if (!!queryParams) {
+		const query = createFindQuery(queryParams, reType,sortOptions);
 
-				'about.type': !!propertyType ? { $in: propertyType } : { $regex: '.*' },
-			};
-
-			flats = await RealEstate.find(query);
-		} else {
-			flats = await RealEstate.find({ type: reType });
-		}
+		flats = await RealEstate.find(query).sort(sortby[sortOptions.sortBy]);
+		// } else {
+		// 	flats = await RealEstate.find({ type: reType }).sort('-updatedAt');
+		// }
 
 		flats = formatEnteryDate(flats);
-
-		res.send(flats);
+		const factor = 10;
+		res.send({ re: flats.slice(page * factor - factor, page * factor), pageNum: flats.length / factor });
 	} catch (e) {
 		console.log(e);
 		res.status(400).send(e);
