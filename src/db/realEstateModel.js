@@ -54,6 +54,9 @@ const realEstateSchema = new Schema({
 },
 {timestamps:true}
 );
+
+realEstateSchema.index({'$**': 'text'});
+
 // realEstateSchema.plugin(timestamps);
 const RealEstate = mongoose.model("realEstate", realEstateSchema);
 // const house=new RealEstate({about:{sheler:true}})
