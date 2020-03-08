@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 mongoose.connect('mongodb://127.0.0.1:27017/realEstate', {
 	useUnifiedTopology: true,
 	useNewUrlParser: true,
@@ -14,9 +13,11 @@ db.once('open', () => console.log("we're connected to db!"));
 const { housePics, roomPics } = require('./pics');
 
 const RealEstate = require('./realEstateModel');
+const User = require('./userModel');
 
 const realEstates = [
 	{
+		owner: new mongoose.mongo.ObjectId("5e64a91e9381aa65471f4b89"),
 		address: { city: 'מבוא חורון', street: 'יפה נוף', number: 345 },
 		price: 2000000,
 		pictures: [housePics[0], roomPics[0]],
@@ -51,8 +52,9 @@ const realEstates = [
 		},
 	},
 	{
+		owner: new mongoose.mongo.ObjectId('5e64a91e9381aa65471f4b89'),
 		address: { city: 'מבוא חורון', street: 'יפה נוף', number: 345 },
-		price:0 ,
+		price: 0,
 		pictures: [housePics[0], housePics[0]],
 		description:
 			'דירה למגורים ולהשקעה ודאית! הדירה במתחם שאושר לעסקת פינוי-בינוי חתומה מול יזם, בליווי העירייה והמדינה בהליך מואץ לביצוע. דירת התמורה החדשה: 5 חדרים + מרפסת וחניה.',
@@ -83,7 +85,9 @@ const realEstates = [
 			//meetingRoom:{...detail},
 			//  rentedTill:{type:Date,default:'not specified'},
 		},
-	},{
+	},
+	{
+		owner: new mongoose.mongo.ObjectId('5e64a91e9381aa65471f4b89'),
 		address: { city: 'רחובות', street: 'חזון איש', neighborhood: 'רחובות הצעירה', number: 4 },
 		price: 3000000,
 		//pictures: [housePics[1], roomPics[1]],
@@ -118,6 +122,7 @@ const realEstates = [
 		},
 	},
 	{
+		owner: new mongoose.mongo.ObjectId('5e64a91e9381aa65471f4b8a'),
 		address: { city: 'רחובות', street: 'חזון איש', neighborhood: 'רחובות הצעירה', number: 4 },
 		price: 3000000,
 		pictures: [housePics[1], roomPics[1]],
@@ -152,6 +157,8 @@ const realEstates = [
 		},
 	},
 	{
+		
+		owner: new mongoose.mongo.ObjectId('5e64a91e9381aa65471f4b8a'),
 		address: { city: 'להבים', street: 'נחל ירוחם', number: 9 },
 		price: 3500000,
 		pictures: [housePics[2], roomPics[2]],
@@ -186,6 +193,7 @@ const realEstates = [
 		},
 	},
 	{
+		owner: new mongoose.mongo.ObjectId('5e64a91e9381aa65471f4b8a'),
 		address: { city: 'נתניה', street: 'אייר', neighborhood: 'קרית השרון', number: 4 },
 		price: 100000,
 		pictures: [housePics[3], roomPics[3]],
@@ -220,6 +228,7 @@ const realEstates = [
 		},
 	},
 	{
+		owner: new mongoose.mongo.ObjectId('5e64a91e9381aa65471f4b8a'),
 		address: { city: 'ירושלים', street: 'נשר', neighborhood: 'גילה', number: 4 },
 		price: 3500000,
 		pictures: [housePics[4], roomPics[4]],
@@ -255,6 +264,7 @@ const realEstates = [
 		},
 	},
 	{
+		owner: new mongoose.mongo.ObjectId('5e64a91e9381aa65471f4b89'),
 		address: { city: 'דימונה', street: 'שדרות ירושלים', neighborhood: 'ממשית', number: 19 },
 		price: 2700000,
 		pictures: [housePics[4], roomPics[4]],
@@ -290,11 +300,37 @@ const realEstates = [
 		},
 	},
 ];
-
+users = [
+	{
+		name: 'Shimon',
+		email: 'Shimon@gmail.com',
+		password: 'Shimon',
+		phone: '555-1234',
+	},
+	{
+		name: 'Shimon2',
+		email: 'Shimon2@gmail.com',
+		password: 'Shimon2',
+		phone: '666-1234',
+	},
+];
+//  User.insertMany(users ,e => console.log(e))
+//User.remove({}, () => console.log('remove'));
 // realEstates.forEach(re => {	new RealEstate(re).save(e => console.log(e));});
 
 //RealEstate.remove({}, ()=>console.log('remove'));
 for(let i=0;i<10;i++){
 	RealEstate.insertMany(realEstates, e => console.log(e));
 }
-//RealEstate.insertMany(realEstates, e => console.log(e));
+RealEstate.insertMany(realEstates, e => console.log(e));
+
+// async function setToken(){
+// const users=await User.find()
+// //console.log(users);
+
+// users.forEach(u=>{
+// 	//console.log(process.env)
+// 	u.generateAuthToken()
+// })}
+
+// setToken()

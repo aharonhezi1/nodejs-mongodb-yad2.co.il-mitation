@@ -50,7 +50,11 @@ const realEstateSchema = new Schema({
     type: String,
     default: "forsale",
     required: true
-  }
+  }, owner:{
+    type:mongoose.Schema.Types.ObjectId,
+    require:true,
+    ref:'User'
+}
 },
 {timestamps:true}
 );

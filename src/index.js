@@ -5,11 +5,13 @@ const path = require('path');
 const cors = require('cors');
 require('./db/mongoose.js');
 const reApi=require('./api-router/re-api')
+const usersApi= require('./api-router/users-api')
 const port = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 app.use( express.static(path.join(__dirname, 'public')));
 app.use(reApi)
+app.use(usersApi)
 
 app.listen(port, () => {
 	console.log('Server ' + port + ' started!');
