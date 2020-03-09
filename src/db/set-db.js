@@ -306,23 +306,26 @@ users = [
 		email: 'Shimon@gmail.com',
 		password: 'Shimon',
 		phone: '555-1234',
+		_id:'5e64a91e9381aa65471f4b89'
 	},
 	{
 		name: 'Shimon2',
 		email: 'Shimon2@gmail.com',
 		password: 'Shimon2',
 		phone: '666-1234',
+		_id:'5e64a91e9381aa65471f4b8a'
+
 	},
 ];
-//  User.insertMany(users ,e => console.log(e))
+  User.insertMany(users ,e => console.log(e))
 //User.remove({}, () => console.log('remove'));
 // realEstates.forEach(re => {	new RealEstate(re).save(e => console.log(e));});
 
 //RealEstate.remove({}, ()=>console.log('remove'));
-for(let i=0;i<10;i++){
+for(let i=0;i<20;i++){
 	RealEstate.insertMany(realEstates, e => console.log(e));
 }
-RealEstate.insertMany(realEstates, e => console.log(e));
+// RealEstate.insertMany(realEstates, e => console.log(e));
 
 // async function setToken(){
 // const users=await User.find()
