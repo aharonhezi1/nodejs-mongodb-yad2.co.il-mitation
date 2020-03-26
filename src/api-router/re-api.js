@@ -91,6 +91,10 @@ router.post('/api/real-estate/find-address', (req, res) => {
 		res.send(e);
 	}
 });
+router.post('/api/real-estate/:id',async(req,res)=>{
+console.log(req.body);
+
+})
 
 router.get('/api/real-estate/:id', async (req, res) => {
 	try {
